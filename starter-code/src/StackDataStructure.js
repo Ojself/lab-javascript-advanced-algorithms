@@ -1,37 +1,39 @@
-class StackDataStructure {
-  constructor() {
-    this.stackControl = [];
-    this.MAX_SIZE = 8;
-  }
 
-  isEmpty() {
-    if (this.stackControl.length > 0) {
-      return false;
-    }
+
+//////Stack
+function StackDataStructure () {
+  this.stackControl=[];
+  this.MAX_SIZE=10;
+}
+
+StackDataStructure.prototype.isEmpty = function(){
+  if(this.stackControl.length === 0)
     return true;
-  }
+  return false;
+}
 
-  canPush() {
-    if (this.stackControl.length < this.MAX_SIZE) {
-      return true;
-    }
-    return false;
-  }
+StackDataStructure.prototype.canPush = function(){
+  return this.stackControl.length < this.MAX_SIZE
+    
+}
 
-  push(queAñadir) {
-    if (this.canPush()) {
-      this.stackControl.push(queAñadir);
-    } else {
-      return "Stack Overflow";
-    }
+StackDataStructure.prototype.push = function(lastElement){
+  if(this.canPush()){
+    this.stackControl.push(lastElement);
     return this.stackControl;
   }
+  return "Stack Overflow";
+}
 
-  pop() {
-    if (this.isEmpty()) {
-      return "Stack Underflow";
-    }
-    this.stackControl.pop();
-    return this.stackControl[this.stackControl.length - 1];
-  }
+StackDataStructure.prototype.pop = function(){
+  if(this.stackControl.length<=0)
+    return "Stack Underflow";
+  lastElement=this.stackControl[this.stackControl.length-1];
+  this.stackControl.splice(this.stackControl.length-1,1);
+  return lastElement;
+}
+
+StackDataStructure.prototype.clear = function(){
+  while(!this.isEmpty())
+    this.pop();
 }

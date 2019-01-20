@@ -1,46 +1,100 @@
-var stackAdd = $("#add-stack");
-var stackRemover = $("#take-stack");
-var app = new StackDataStructure();
+$(document).ready(function(){
+  var html="";
+  var stackObj=new StackDataStructure();
 
-stackAdd.click(function() {
-  var item = $("#input-stack");
-  if (item.val() !== "") {
-    app.push(item.val());
-    updateStacks();
-    item.val("");
-    $("#s-underflow").addClass("invisible");
-  }
-  if (app.canPush() == false) {
-    $("#s-overflow").removeClass("invisible");
-  } else {
-    $("#s-overflow").addClass("invisible");
+  $("#stack").click(function(){
+      if(!$(this).hasClass("active")){
+        $(this).addClass("active");
+        $("#queue").removeClass("active");
+      }
+      $("#tipo").empty();
+      stackObj.clear();
+      creaStack();
+      $("#tipo").html(html);
+  });
+
+  $(".btn-success").click(function(){
+    if($("#stack").hasClass("active")){
+      if(stackObj.canPush()){
+        stackObj.push($(".form-control").val());
+        for(let i=0;i<($("#stack>div.fondo").length);i++){
+          if(i<stackObj.stackControl.length){
+            var dato=$("#stack>div.fondo>p")[($("#stack>div.fondo").length-1) - i];
+            dato.innerText=stackObj.stackControl[i];
+            dato.className="dato-informado";
+            $(".form-control").val("");
+          }
+        }
+        $("#under-stack>p:first-child").removeClass("overflow");
+        $("#under-stack>p:first-child").parent().removeClass("fondo-under");
+        $("#under-stack>p:first-child").text("");
+      }
+      else{
+        $("#top-stack>p:first-child").text("Stack Overflow");
+        $("#top-stack>p:first-child").addClass("overflow");
+        $("#top-stack>p:first-child").parent().addClass("fondo-top");
+      }
+    }
+  });
+
+  $(".btn-danger").click(function(){
+    if($("#stack").hasClass("active")){
+      if(!stackObj.isEmpty()){
+        stackObj.pop();
+        var dato=$("#stack>div.fondo>p")[($("#stack>div.fondo").length-1)-(stackObj.stackControl.length)];
+        dato.innerText="";
+        dato.className="";
+        $("#top-stack>p:first-child").removeClass("overflow");
+        $("#top-stack>p:first-child").parent().removeClass("fondo-top");
+        $("#top-stack>p:first-child").text("");
+      }
+      else{
+        $("#under-stack>p:first-child").text("Stack Underflow");
+        $("#under-stack>p:first-child").addClass("overflow");
+        $("#under-stack>p:first-child").parent().addClass("fondo-under");
+      }
+    }
+  });
+
+  function creaStack(){
+    html="";
+    html+=' <div id="stack">';
+    html+='  <div id="top-stack">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div class="fondo">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+='  <div id="under-stack">';
+    html+='    <p></p>';
+    html+='  </div>';
+    html+=' </div>';
   }
 });
-
-stackRemover.click(function() {
-  app.pop();
-  updateStacks();
-  $("#s-overflow").addClass("invisible");
-  if (app.isEmpty() == true) {
-    $("#s-underflow").removeClass("invisible");
-  } else {
-    $("#s-underflow").addClass("invisible");
-  }
-});
-
-function updateStacks() {
-  for (var i = 0; i < 8; i++) {
-    if (i >= app.stackControl.length) {
-      $("#s-" + (i + 1)).html(" ");
-    } else {
-      $("#s-" + (i + 1)).html(app.stackControl[i]);
-    }
-
-    if ($("#s-" + (i + 1)).html() !== " ") {
-      $("#s-" + (i + 1)).addClass("active");
-    } else {
-      $("#s-" + (i + 1)).removeClass("active");
-      $("#s-" + (i + 1)).html(" ");
-    }
-  }
-}

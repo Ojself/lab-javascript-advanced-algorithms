@@ -1,46 +1,107 @@
-var queAdd = $("#add-queue");
-var queRem = $("#take-queue");
-var appQ = new QueueDataStructure();
+$(document).ready(function(){
+  var html="";
+  var queueObj=new QueueDataStructure();
 
-queAdd.click(function() {
-  var item = $("#input-queue");
-  if (item.val() !== "") {
-    appQ.enqueue(item.val());
-    updatequeues();
-    item.val("");
-    $("#q-underflow").addClass("invisible");
-  }
-  if (appQ.canEnqueue() == false) {
-    $("#q-overflow").removeClass("invisible");
-  } else {
-    $("#q-overflow").addClass("invisible");
+  $("#queue").click(function(){
+      if(!$(this).hasClass("active")){
+        $(this).addClass("active");
+        $("#stack").removeClass("active");
+      }
+      $("#tipo").empty();
+      queueObj.clear();
+      creaQueue();
+      $("#tipo").html(html);
+  });
+
+  $(".btn-success").click(function(){
+    if($("#queue").hasClass("active")){
+      if(queueObj.canEnqueue()){
+        queueObj.enqueue($(".form-control").val());
+        for(let i=0;i<($("#queue>div.fondoQ").length);i++){
+          if(i<queueObj.queueControl.length){
+            var dato=$("#queue>div.fondoQ>p")[($("#queue>div.fondoQ").length-1) - i];
+            dato.innerText=queueObj.queueControl[(queueObj.queueControl.length-1)-i];
+            dato.className="dato-informadoQ";
+            $(".form-control").val("");
+          }
+        }
+        $("#under-queue>p:first-child").removeClass("overflow");
+        $("#under-queue>p:first-child").parent().removeClass("fondo-under");
+        $("#under-queue>p:first-child").text("");
+      }
+      else{
+        $("#top-queue>p:first-child").text("Queue Overflow");
+        $("#top-queue>p:first-child").addClass("overflow");
+        $("#top-queue>p:first-child").parent().addClass("fondo-top");
+      }
+    }
+  });
+
+  $(".btn-danger").click(function(){
+    if($("#queue").hasClass("active")){
+      if(!queueObj.isEmpty()){
+        queueObj.dequeue();
+        var dato=$("#queue>div.fondoQ>p.dato-informadoQ").first();
+        dato.text("");
+        dato.removeClass("dato-informadoQ");
+        for(let i=0;i<($("#queue>div.fondoQ").length);i++){
+          if(i<queueObj.queueControl.length){
+            var dato=$("#queue>div.fondoQ>p")[($("#queue>div.fondoQ").length-1) - i];
+            dato.innerText=queueObj.queueControl[(queueObj.queueControl.length-1)-i];
+            dato.className="dato-informadoQ";
+          }
+        }
+        $("#top-queue>p:first-child").removeClass("overflow");
+        $("#top-queue>p:first-child").parent().removeClass("fondo-top");
+        $("#top-queue>p:first-child").text("");
+      }
+      else{
+        $("#under-queue>p:first-child").text("Queue Underflow");
+        $("#under-queue>p:first-child").addClass("overflow");
+        $("#under-queue>p:first-child").parent().addClass("fondo-under");
+      }
+    }
+  });
+
+  function creaQueue(){
+    html="";
+    html+=' <div id="queue">'
+    html+='   <div id="top-queue">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div class="fondoQ">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+='   <div id="under-queue">'
+    html+='     <p></p>'
+    html+='   </div>'
+    html+=' </div>'
   }
 });
-
-queRem.click(function() {
-  appQ.dequeue();
-  updatequeues();
-  $("#q-overflow").addClass("invisible");
-  if (appQ.isEmpty() == true) {
-    $("#q-underflow").removeClass("invisible");
-  } else {
-    $("#q-underflow").addClass("invisible");
-  }
-});
-
-function updatequeues() {
-  for (var i = 0; i < 8; i++) {
-    if (i >= appQ.queueControl.length) {
-      $("#q-" + (i + 1)).html(" ");
-    } else {
-      $("#q-" + (i + 1)).html(appQ.queueControl[i]);
-    }
-
-    if ($("#q-" + (i + 1)).html() !== " ") {
-      $("#q-" + (i + 1)).addClass("active");
-    } else {
-      $("#q-" + (i + 1)).removeClass("active");
-      $("#q-" + (i + 1)).html(" ");
-    }
-  }
-}
